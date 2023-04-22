@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import socket
 import struct
+from image_seg import find_center
 
 MAX_DGRAM = 2**16
 
@@ -23,7 +24,7 @@ def main():
     
     # Set up socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.bind(('192.168.1.52', 50050))
+    s.bind(('192.168.1.50', 50050))
     dat = b''
     dump_buffer(s)
 
@@ -34,7 +35,7 @@ def main():
         else:
             dat += seg[1:]
             img = cv2.imdecode(np.fromstring(dat, dtype=np.uint8), 1)
-            cv2.imshow('frame', img)
+            cv2.imshow('frame', find_center(img))
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             dat = b''
